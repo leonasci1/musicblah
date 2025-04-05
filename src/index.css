@@ -5,6 +5,24 @@
 
 @layer base {
   :root {
+      --background: #121212; /* Cor de fundo principal */
+      --background-secondary: #181818; /* Cor de fundo secundária */
+      --text-primary: #FFFFFF; /* Cor do texto primário */
+      --text-secondary: #B3B3B3; /* Cor do texto secundário */
+      --accent: #1DB954; /* Cor de destaque (verde do Spotify) */
+      --border: #282828; /* Cor da borda */
+    }
+
+    body {
+      color: var(--text-primary);
+      font-family: 'Outfit', sans-serif; /* Define a fonte Outfit */
+    }
+    
+    .dark-theme {
+      background-color: var(--background);
+      color: var(--text-primary);
+
+
     --background: 250 100% 99%;
     --foreground: 240 10% 3.9%;
 

@@ -58,11 +58,11 @@ export function MusicStats() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="genres">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="genres">Gêneros</TabsTrigger>
-            <TabsTrigger value="artists">Artistas</TabsTrigger>
-            <TabsTrigger value="tracks">Faixas</TabsTrigger>
-          </TabsList>
+        <TabsList className="grid w-full grid-cols-3 rounded-full bg-background hover:text-accent-foreground ">
+          <TabsTrigger value="genres" className="rounded-full bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Gêneros</TabsTrigger>
+          <TabsTrigger value="artists" className="rounded-full bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Artistas</TabsTrigger>
+          <TabsTrigger value="tracks" className="rounded-full bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Faixas</TabsTrigger>
+        </TabsList>
           
           <TabsContent value="genres" className="mt-4">
             <div className="h-64">

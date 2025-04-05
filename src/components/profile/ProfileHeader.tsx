@@ -51,7 +51,7 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
         
         <p className="mt-3 text-sm">{user.bio}</p>
         
-        <div className="mt-4 flex items-center gap-4 text-sm">
+        <div className="mt-4 flex items-center gap-4 text-sm ">
           <div className="flex items-center gap-1">
             <span className="font-bold">{user.followers}</span>
             <span className="text-muted-foreground">seguidores</span>

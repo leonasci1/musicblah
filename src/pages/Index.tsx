@@ -1,8 +1,23 @@
-
 import { MusicPost } from "@/components/post/MusicPost";
 import { CreatePostInput } from "@/components/post/CreatePostInput";
 import { NowPlaying } from "@/components/post/NowPlaying";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { getAuthUrl } from "@/services/spotify";
+import { TrendingSongs } from "@/components/trending/TrendingSongs";
+
+function login() {
+  // Redireciona o usuário para a URL de autenticação do Spotify
+  window.location.href = getAuthUrl();
+}
+
+export function SpotifyLoginButton() {
+  return (
+    <Button onClick={login}>
+      Conectar ao Spotify
+    </Button>
+  );
+}
 
 // Mock data
 const posts = [
@@ -18,10 +33,12 @@ const posts = [
     likes: 24,
     comments: 5,
     music: {
-      title: "Blinding Lights",
-      artist: "The Weeknd",
-      album: "After Hours",
-      cover: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/The_Weeknd_-_After_Hours.png/220px-The_Weeknd_-_After_Hours.png",
+      title: "Se Eu For Eu Vou Com Você",
+      artist: "Fresno, Nx Zero",
+      album: "Eu Nunca Fui Embora",
+      cover: "https://i.scdn.co/image/ab67616d0000b2735e53ffef0d2955416ab6d8fa",
+      duration: "3:45",
+      progress: 30,
     },
   },
   {
@@ -58,39 +75,31 @@ const posts = [
 
 const nowPlaying = {
   user: {
-    name: "Pedro Costa",
-    username: "pedrocosta",
-    avatar: "https://ui-avatars.com/api/?name=Pedro+Costa&background=F87171&color=fff",
+    name: "Samirah Fontenele",
+    username: "sweetdlibyh",
+    avatar: "https://pbs.twimg.com/profile_images/1903626006256058368/xfLZ2ipm_400x400.jpg",
   },
   music: {
-    title: "Levitating",
-    artist: "Dua Lipa ft. DaBaby",
-    album: "Future Nostalgia",
-    cover: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Dua_Lipa_-_Future_Nostalgia_%28Official_Album_Cover%29.png/220px-Dua_Lipa_-_Future_Nostalgia_%28Official_Album_Cover%29.png",
-    duration: "3:23",
+    title: "Meet Me in the Hallway",
+    artist: "Harry Styles",
+    album: "Harry Styles",
+    cover: "https://m.media-amazon.com/images/I/71ICZkHhviL.jpg",
+    duration: "3:47",
     progress: 45,
   },
 };
-
-const trendingSongs = [
-  "Flowers - Miley Cyrus",
-  "Kill Bill - SZA",
-  "Anti-Hero - Taylor Swift",
-  "Creepin' - Metro Boomin, The Weeknd",
-  "Unholy - Sam Smith, Kim Petras",
-];
 
 export default function Index() {
   return (
     <div className="flex flex-col gap-6 md:flex-row">
       <div className="flex-1 space-y-4">
         <CreatePostInput />
-        
+
         <NowPlaying user={nowPlaying.user} music={nowPlaying.music} />
-        
+
         <div className="space-y-4">
           {posts.map((post) => (
-            <MusicPost 
+            <MusicPost
               key={post.id}
               user={post.user}
               content={post.content}
@@ -102,29 +111,16 @@ export default function Index() {
           ))}
         </div>
       </div>
-      
+
       <div className="hidden md:block w-80 space-y-4">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Músicas em Alta</CardTitle>
+            <SpotifyLoginButton />
           </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              {trendingSongs.map((song, index) => (
-                <li 
-                  key={index} 
-                  className="flex items-center gap-2 rounded-md p-2 hover:bg-accent transition-colors"
-                >
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-music-purple/10 text-music-purple text-xs font-medium">
-                    {index + 1}
-                  </div>
-                  <span className="text-sm">{song}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
+          <TrendingSongs />
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Sugestões para Seguir</CardTitle>

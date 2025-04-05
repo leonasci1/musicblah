@@ -6,12 +6,12 @@ import { MusicPost } from "@/components/post/MusicPost";
 
 // Mock user data
 const user = {
-  name: "Usuário Musicblah",
-  username: "user123",
-  avatar: "https://github.com/shadcn.png",
+  name: "Leandremo",
+  username: "leandremo",
+  avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2NcYvsA-Dl2WyQfzhRh_Xa08irdgE7kvk6bdMSJQFXUA1jWjTM9aPzGUo6PDcRSQGggw&usqp=CAU",
   coverImage: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1000",
   bio: "Amante de música e boa vibração ✨ | Rock, Pop e tudo mais | Sempre em busca de novas descobertas musicais",
-  followers: 245,
+  followers: 109370,
   following: 187,
   isCurrentUser: true,
 };
@@ -25,7 +25,7 @@ const posts = [
       username: user.username,
       avatar: user.avatar,
     },
-    content: "Revisitando esse clássico hoje. Uma obra-prima!",
+    content: "como pode algm ter criado essa música?",
     timestamp: "2d atrás",
     likes: 35,
     comments: 8,
@@ -85,12 +85,12 @@ export default function Profile() {
     <div>
       <ProfileHeader user={user} />
       
-      <Tabs defaultValue="posts" className="mb-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="posts">Posts</TabsTrigger>
-          <TabsTrigger value="favorites">Favoritos</TabsTrigger>
-          <TabsTrigger value="artists">Artistas</TabsTrigger>
-          <TabsTrigger value="stats">Estatísticas</TabsTrigger>
+      <Tabs defaultValue="posts" className="mb-6 ">
+        <TabsList className="grid w-full grid-cols-4 rounded-full bg-background transition-colors duration-200  hover:bg-background opacity-100 cursor-pointer">
+          <TabsTrigger value="posts" className="rounded-full bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Posts</TabsTrigger>
+          <TabsTrigger value="favorites" className="rounded-full bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Favoritos</TabsTrigger>
+          <TabsTrigger value="artists" className="rounded-full bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Artistas</TabsTrigger>
+          <TabsTrigger value="stats" className="rounded-full bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Estatísticas</TabsTrigger>
         </TabsList>
         
         <TabsContent value="posts" className="mt-6 space-y-4">
