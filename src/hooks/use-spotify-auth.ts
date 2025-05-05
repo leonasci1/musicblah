@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-// Authentication-related functions for Spotify
-
 // Configuração do Spotify
 const CLIENT_ID = '5b8cd851163d46c5894d3e2de61063f6';
 const REDIRECT_URI = window.location.origin + '/spotify-callback';
@@ -12,11 +10,15 @@ const SCOPES = [
   'playlist-read-private',
   'playlist-read-collaborative',
   'user-read-recently-played'
-].join('%20');
+].join(' '); // Usando espaço para facilitar a leitura, depois o encode será feito
 
 // URL para iniciar o processo de autenticação
-export const getAuthUrl = () => {
-  return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPES}&show_dialog=true`;
+export const getAuthUrl = (): string => {
+  return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}` +
+         `&response_type=token` +
+         `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+         `&scope=${encodeURIComponent(SCOPES)}` +
+         `&show_dialog=true`;
 };
 
 // Função para extrair o token de acesso da URL
@@ -30,7 +32,7 @@ export const getTokenFromUrl = (): string | null => {
       return null;
     }
     
-    // Remover o # inicial e dividir os parâmetros usando URLSearchParams
+    // Remove o '#' inicial e usa URLSearchParams para obter os parâmetros
     const params = new URLSearchParams(hash.substring(1));
     const accessToken = params.get('access_token');
     
@@ -48,7 +50,7 @@ export const saveToken = (token: string): void => {
   localStorage.setItem('spotify_token', token);
   localStorage.setItem('spotify_token_timestamp', Date.now().toString());
   
-  // Disparar evento personalizado para notificar outros componentes
+  // Dispara evento personalizado para notificar outros componentes
   window.dispatchEvent(new Event('spotify_auth_changed'));
 };
 
@@ -57,12 +59,12 @@ export const getToken = (): string | null => {
   const token = localStorage.getItem('spotify_token');
   const timestamp = localStorage.getItem('spotify_token_timestamp');
   
-  // Verificar se o token expirou (tokens do Spotify duram 1 hora = 3600000 ms)
+  // Verifica se o token expirou (1 hora = 3600000 ms)
   if (token && timestamp) {
     const now = Date.now();
     const tokenAge = now - parseInt(timestamp, 10);
     if (tokenAge > 3600000) {
-      // Token expirado, remova e retorne null
+      // Token expirado, remove e retorna null
       localStorage.removeItem('spotify_token');
       localStorage.removeItem('spotify_token_timestamp');
       return null;
@@ -76,8 +78,16 @@ export default function useSpotifyAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Atualiza o estado de autenticação ao montar o hook
+  
   useEffect(() => {
+    // Verifica se existe um token na URL e salva, caso exista.
+    const tokenFromUrl = getTokenFromUrl();
+    if (tokenFromUrl) {
+      saveToken(tokenFromUrl);
+      // Limpa o hash da URL para evitar reprocessamento
+      window.history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
+
     const token = getToken();
     setIsAuthenticated(!!token);
     setIsLoading(false);
@@ -85,6 +95,7 @@ export default function useSpotifyAuth() {
 
   return {
     isAuthenticated,
+    isLoading,
     login: () => {
       window.location.href = getAuthUrl();
     },

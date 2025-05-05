@@ -9,6 +9,7 @@ import { CiSearch } from "react-icons/ci";
 import { LuUserRound } from "react-icons/lu";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaRegEnvelopeOpen } from "react-icons/fa";
+import Login from "@/pages/Login";
 
 export function Navbar() {
   return (

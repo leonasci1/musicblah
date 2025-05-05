@@ -51,7 +51,7 @@ export function NowPlaying({ user, music }: NowPlayingProps) {
         }
         return newProgress;
       });
-    }, 1000) as any; // Casting para 'any' para evitar erro de tipo
+    }, 1000) as unknown as number; // Casting para 'number' para evitar erro de tipo
 
     // Função de limpeza para limpar o intervalo quando o componente é desmontado ou quando a duração da música muda
     return () => {

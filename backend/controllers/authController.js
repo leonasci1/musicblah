@@ -1,120 +1,91 @@
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const spotifyService = require('../services/spotifyService');
+const bcrypt = require('bcrypt');
 
-exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
-
+// Código original
+const register = async (req, res) => {
   try {
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
+    const { username, password } = req.body;
+    const user = new User({ username, password });
+    await user.save();
+    res.status(201).json({ message: 'Usuário registrado com sucesso' });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao registrar usuário', error: err.message });
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const user = req.user;
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao fazer login', error: err.message });
+  }
+};
+
+const spotifyCallback = (req, res) => {
+  res.redirect('/');
+};
+
+// Novas funções adicionadas
+exports.signup = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    // Validações básicas
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
     }
 
-    user = new User({
-      name,
-      email,
-      password,
-    });
+    // Verifica se o email já está registrado
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email já está em uso' });
+    }
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    // Hash da senha
+    const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Cria o usuário
+    const user = new User({ username, email, password: hashedPassword });
     await user.save();
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
+    res.status(201).json({ message: 'Usuário registrado com sucesso' });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Erro ao registrar usuário', error: err.message });
   }
 };
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    let user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+    const { email, password } = req.body;
+
+    // Validações básicas
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email e senha são obrigatórios' });
     }
 
+    // Busca o usuário pelo email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Credenciais inválidas' });
+    }
+
+    // Compara a senha
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+      return res.status(401).json({ message: 'Credenciais inválidas' });
     }
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
+    // Gera o token JWT
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
+    res.json({ token });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Erro ao fazer login', error: err.message });
   }
 };
 
-exports.spotifyCallback = async (req, res) => {
-  const { code } = req.query;
-
-  try {
-    const spotifyData = await spotifyService.getAccessToken(code);
-    const { access_token, refresh_token, expires_in } = spotifyData;
-
-    const spotifyProfile = await spotifyService.getUserProfile(access_token);
-
-    let user = await User.findOne({ spotifyId: spotifyProfile.id });
-    if (!user) {
-      user = new User({
-        name: spotifyProfile.display_name,
-        email: spotifyProfile.email,
-        spotifyId: spotifyProfile.id,
-      });
-      await user.save();
-    }
-
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-};
+// Exportação
+module.exports = { register, login, spotifyCallback, signup: exports.signup, loginAlt: exports.login };

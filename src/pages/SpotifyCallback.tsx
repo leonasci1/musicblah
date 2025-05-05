@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getTokenFromUrl, saveToken } from '@/services/spotify';
 import { toast } from "@/components/ui/use-toast";
 
 export default function SpotifyCallback() {
-  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState<boolean>(true);
 
@@ -14,53 +12,57 @@ export default function SpotifyCallback() {
         setProcessing(true);
         console.log("Processando autenticação do Spotify...");
         console.log("URL atual:", window.location.href);
-        
+
         // Verificar se há um erro nos parâmetros da URL
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window.location.hash.substring(1)); // Corrigido para usar o hash
         const errorParam = urlParams.get('error');
-        
+
         if (errorParam) {
           console.error("Erro retornado do Spotify:", errorParam);
           throw new Error(`Erro de autenticação do Spotify: ${errorParam}`);
         }
-        
+
         // Extrair o token da URL usando a função melhorada
-        const token = getTokenFromUrl();
+        const token = urlParams.get('access_token');
         console.log("Token extraído:", token ? "Token presente" : "Token ausente");
-        
+
         if (token) {
           // Salvar o token
           saveToken(token);
           console.log("Token salvo com sucesso");
-          
+
           toast({
             title: "Conectado ao Spotify",
             description: "Autenticação realizada com sucesso!",
           });
-          
-          // Redirecionar para a página inicial após um pequeno delay
+
+          // Redirecionar para a página principal
           setTimeout(() => {
-            console.log("Redirecionando para a página inicial...");
-            navigate('/');
+            console.log("Redirecionando para a página principal...");
+            window.location.href = '/';
           }, 2000);
         } else {
           console.error("Falha ao extrair token da URL");
           throw new Error("Não foi possível obter o token de acesso. Verifique o console para mais detalhes.");
         }
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error("Exceção durante a autenticação:", e);
-        setError(e.message || "Erro no processamento da autenticação");
-        
+        if (e instanceof Error) {
+          setError(e.message || "Erro no processamento da autenticação");
+        } else {
+          setError("Erro no processamento da autenticação");
+        }
+
         toast({
           title: "Erro de Autenticação",
-          description: e.message || "Não foi possível conectar ao Spotify. Tente novamente.",
+          description: e instanceof Error ? e.message : "Não foi possível conectar ao Spotify. Tente novamente.",
           variant: "destructive",
         });
-        
-        // Redirecionar após mostrar o erro
+
+        // Redirecionar após erro
         setTimeout(() => {
-          console.log("Redirecionando para a página inicial após erro...");
-          navigate('/');
+          console.log("Redirecionando para a página principal após erro...");
+          window.location.href = '/';
         }, 3000);
       } finally {
         setProcessing(false);
@@ -68,7 +70,7 @@ export default function SpotifyCallback() {
     };
 
     processAuthentication();
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="flex h-[80vh] w-full items-center justify-center">
@@ -82,7 +84,7 @@ export default function SpotifyCallback() {
             </div>
             <h1 className="text-2xl font-semibold">Falha na Autenticação</h1>
             <p className="text-muted-foreground">{error}</p>
-            <p className="mt-4 text-sm">Redirecionando para a página inicial...</p>
+            <p className="mt-4 text-sm">Redirecionando para a página principal...</p>
           </>
         ) : (
           <>

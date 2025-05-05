@@ -1,10 +1,15 @@
 const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
-const authMiddleware = require('../middleware/authMiddleware');
+const passport = require('passport');
+const { register, login, spotifyCallback } = require('../controllers/authController');
+const { signup} = require('../controllers/authController');
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-router.get('/spotify/callback', authController.spotifyCallback);
+const router = express.Router();
+
+router.post('/register', register);
+router.post('/login', passport.authenticate('local', { session: false }), login);
+router.get('/spotify', passport.authenticate('spotify', { scope: ['user-read-email', 'user-read-private'] }));
+router.get('/spotify/callback', passport.authenticate('spotify', { failureRedirect: '/login' }), spotifyCallback);
+router.post('/signup', signup);
+router.post('/login', login);
 
 module.exports = router;

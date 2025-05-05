@@ -1,19 +1,11 @@
 const express = require('express');
-const connectDB = require('./config/db');
+const passport = require('./config/passport');
 const authRoutes = require('./routes/authRoutes');
-const cors = require('cors');
-require('dotenv').config();
 
 const app = express();
 
-// Conectar ao banco de dados
-connectDB();
-
-// Middleware
-app.use(cors());
 app.use(express.json());
-
-// Rotas
-app.use('/api/auth', authRoutes);
+app.use(passport.initialize());
+app.use('/auth', authRoutes);
 
 module.exports = app;
