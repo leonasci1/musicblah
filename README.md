@@ -1,73 +1,30 @@
-# Welcome to your Lovable project
+Descrição musicblah!
 
-## Project info
+A musicblah! é uma rede social voltada a resgatar e modernizar o hábito de compartilhar experiências musicais que, no passado, aconteciam de forma presencial — hoje, muitas vezes, nos encontramos isolados ouvindo playlists em nossos fones. Com musicblah!, você pode:
 
-**URL**: https://lovable.dev/projects/8837c081-b0b5-4fe8-95e9-862d02c04cb6
+Descobrir e comentar álbuns recém-lançados, criando resenhas e discussões com amigos e seguidores 
 
-## How can I edit this code?
+.
 
-There are several ways of editing your application.
+Compartilhar em tempo real o que está ouvindo, com mini-players embutidos que exibem capa, álbum e artista.
 
-**Use Lovable**
+Construir perfis sociais baseados em gostos musicais, seguindo outros usuários e criando um feed colaborativo, alavancando a tendência de apps que promovem experiências de música social
+.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8837c081-b0b5-4fe8-95e9-862d02c04cb6) and start prompting.
+Contexto e propósito
+O processo de consumir música mudou radicalmente: antes, reuníamo‑nos em volta de um toca‑discos ou em festas para trocar impressões sobre novas faixas; hoje, em muitas casas, cada um ouve isolado em seu smartphone 
+A missão da musicblah! é aproximar esses ouvintes, permitindo que compartilhem suas descobertas, publiquem resenhas e encontrem novos artistas guiados pelas recomendações de amigos.
 
-Changes made via Lovable will be committed automatically to this repo.
+Meus aprendizados no desenvolvimento
+Frontend com React e TypeScript: consolidei tipagem forte, hooks e gerenciamento de estado usando React Query.
 
-**Use your preferred IDE**
+Backend em Node.js/Express: implementei autenticação com JWT, integração OAuth2 com Spotify e rotas REST seguras.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Banco de dados híbrido (MongoDB/MySQL): modelei usuários e posts no MongoDB, e implementei estatísticas e logs transacionais no MySQL.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Debugging e resolução de bugs: enfrentei erros de CORS, token expirado, over­write de modelos Mongoose e rotas malencaminhadas, refinando o fluxo de autenticação e middlewares.
 
-Follow these steps:
+Integração contínua e testes: criei pipelines com GitHub Actions para testes unitários e E2E, garantindo qualidade de código e cobertura mínima de 80%.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Esse projeto me ensinou não apenas novas tecnologias, mas também a importância de iterar rápido, ouvir feedback dos usuários e arquitetar uma aplicação escalável para suportar milhares de posts e conexões sociais.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/8837c081-b0b5-4fe8-95e9-862d02c04cb6) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
